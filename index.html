@@ -55,7 +55,7 @@
   <img id="product-img" src="" />
 
   <script>
-    const URL = "https://teachablemachine.withgoogle.com/models/if07E20Wq/";
+    const URL = "./";
 
     const productImages = {
       "CASINO FRESA PACK X 6 UNIDADES": "CASINO FRESA PACK X 6 UNIDADES.webp",
@@ -87,7 +87,7 @@
         const price = document.getElementById("price");
 
         if (productImages[label]) {
-          img.src = productImages[label];
+          img.src = "./" + productImages[label];
           img.style.display = "block";
           price.innerText = `💰 Precio: ${productPrices[label]}`;
         } else {
