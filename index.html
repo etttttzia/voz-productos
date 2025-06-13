@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconocimiento de Productos</title>
+  <!-- ✅ CDN CORRECTO Y ACTUALIZADO -->
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/sound@0.8.4/dist/teachablemachine-sound.min.js"></script>
+  <style>
+    body {
+      background-color: #ffe6f0;
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #cc3366;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #ff66a3;
+      color: white;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff3385;
+    }
+    #label {
+      font-size: 22px;
+      margin-top: 20px;
+      color: #b30059;
+    }
+    #price {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #800040;
+    }
+    #product-img {
+      width: 200px;
+      display: none;
+      margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎤 Di el nombre del producto</h1>
+  <button onclick="init()">Iniciar reconocimiento</button>
+  <p id="label"></p>
+  <p id="price"></p>
+  <img id="product-img" src="" />
+
+  <script>
+    // ✅ LA RUTA AL MODELO .json desde la RAÍZ
+    const URL = "./model/";
+
+    const productImages = {
+      "CASINO FRESA PACK X 6 UNIDADES": "CASINO FRESA PACK X 6 UNIDADES.webp",
+      "GLOBO POP FRESA BOLSA X 24 UNIDADES": "GLOBO POP FRESA BOLSA X 24 UNIDADES.jpg",
+      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": "INCA KOLA 600ML PAQUETE X 12 UNIDADES.webp",
+      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": "NIK CHICO CHOCOLATE PACK X 6 UNIDADES.webp"
+    };
+
+    const productPrices = {
+      "CASINO FRESA PACK X 6 UNIDADES": "S/ 5.00",
+      "GLOBO POP FRESA BOLSA X 24 UNIDADES": "S/ 7.50",
+      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": "S/ 20.00",
+      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": "S/ 4.80"
+    };
+
+    let recognizer;
+
+    async function init() {
+      const checkpointURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+
+      recognizer = await tmSound.create(checkpointURL, metadataURL);
+      await recognizer.ensureModelLoaded();
+
+      recognizer.listen(result => {
+        const label = result.label;
+        document.getElementById("label").innerText = `🔎 Detectado: ${label}`;
+        const img = document.getElementById("product-img");
+        const price = document.getElementById("price");
+
+        if (productImages[label]) {
+          img.src = productImages[label];
+          img.style.display = "block";
+          price.innerText = `💰 Precio: ${productPrices[label]}`;
+        } else {
+          img.style.display = "none";
+          price.innerText = "";
+        }
+      }, {
+        includeSpectrogram: false,
+        probabilityThreshold: 0.65
+      });
+    }
+  </script>
+</body>
+</html>
