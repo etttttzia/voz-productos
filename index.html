@@ -1,50 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>✨ Reconocimiento de Productos por Voz ✨</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconocimiento de Productos</title>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/sound@0.8/dist/teachablemachine-sound.min.js"></script>
   <style>
     body {
-      background: linear-gradient(to right, #fbd3e9, #bb377d);
-      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffe6f0;
       text-align: center;
-      padding: 40px;
-      color: #4a004a;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
     }
     h1 {
-      font-size: 2em;
+      color: #cc3366;
       margin-bottom: 20px;
     }
     button {
-      background-color: #ff80ab;
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.1em;
+      background-color: #ff66a3;
       color: white;
-      border-radius: 30px;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 15px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     button:hover {
-      background-color: #f06292;
+      background-color: #ff3385;
     }
     #label {
-      font-size: 1.5em;
+      font-size: 22px;
       margin-top: 20px;
+      color: #b30059;
+    }
+    #price {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #800040;
     }
     #product-img {
       width: 200px;
       display: none;
       margin-top: 20px;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    #price {
-      font-size: 1.3em;
-      margin-top: 10px;
-      color: #880e4f;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
   </style>
 </head>
@@ -52,10 +51,9 @@
   <h1>🎤 Di el nombre del producto</h1>
   <button onclick="init()">Iniciar reconocimiento</button>
   <p id="label"></p>
-  <img id="product-img" src="" />
   <p id="price"></p>
+  <img id="product-img" src="" />
 
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/sound@0.8/dist/teachablemachine-sound.min.js"></script>
   <script>
     const URL = "";
 
@@ -67,10 +65,10 @@
     };
 
     const productPrices = {
-      "CASINO FRESA PACK X 6 UNIDADES": "S/ 3.50",
-      "GLOBO POP FRESA BOLSA X 24 UNIDADES": "S/ 5.20",
-      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": "S/ 18.00",
-      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": "S/ 2.80"
+      "CASINO FRESA PACK X 6 UNIDADES": "S/ 5.00",
+      "GLOBO POP FRESA BOLSA X 24 UNIDADES": "S/ 7.50",
+      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": "S/ 20.00",
+      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": "S/ 4.80"
     };
 
     let recognizer;
@@ -84,14 +82,14 @@
 
       recognizer.listen(result => {
         const label = result.label;
-        document.getElementById("label").innerText = `Detectado: ${label}`;
+        document.getElementById("label").innerText = `🔎 Detectado: ${label}`;
         const img = document.getElementById("product-img");
         const price = document.getElementById("price");
 
         if (productImages[label]) {
-          img.src = "files/" + productImages[label];
+          img.src = productImages[label];
           img.style.display = "block";
-          price.innerText = `Precio: ${productPrices[label]}`;
+          price.innerText = `💰 Precio: ${productPrices[label]}`;
         } else {
           img.style.display = "none";
           price.innerText = "";
