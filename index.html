@@ -1,57 +1,68 @@
-<<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Reconocimiento de voz</title>
-  </head>
-  <body style="text-align:center; font-family: sans-serif;">
-    <h1>🎤 Reconocimiento de voz con Teachable Machine</h1>
-    <button type="button" onclick="init()">Iniciar</button>
-    <div id="label-container" style="margin-top: 20px;"></div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reconocimiento de Voz - Productos</title>
+</head>
+<body style="text-align:center; font-family: sans-serif">
+  <h1>🎤 Di el nombre del producto</h1>
+  <p id="label" style="font-size: 20px;"></p>
+  <img id="product-img" src="" style="width:200px; display:none; margin-top:20px;" />
+  <p id="price" style="font-size: 18px; font-weight: bold;"></p>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/speech-commands@0.4.0/dist/speech-commands.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/sound@0.8/dist/teachablemachine-sound.min.js"></script>
+  <script>
+    const URL = "./";
 
-    <script type="text/javascript">
-      const URL = "./my_model/";
-
-      async function createModel() {
-        const checkpointURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
-
-        const recognizer = speechCommands.create(
-          "BROWSER_FFT",
-          undefined,
-          checkpointURL,
-          metadataURL
-        );
-
-        await recognizer.ensureModelLoaded();
-        return recognizer;
+    const productImages = {
+      "CASINO FRESA PACK X 6 UNIDADES": {
+        img: "CASINO FRESA PACK X 6 UNIDADES.webp",
+        price: "S/ 4.50"
+      },
+      "GLOBO POP FRESA BOLSA X 24 UNIDADES": {
+        img: "GLOBO POP FRESA BOLSA X 24 UNIDADES.jpg",
+        price: "S/ 8.90"
+      },
+      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": {
+        img: "INCA KOLA 600ML PAQUETE X 12 UNIDADES.webp",
+        price: "S/ 22.00"
+      },
+      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": {
+        img: "NIK CHICO CHOCOLATE PACK X 6 UNIDADES.webp",
+        price: "S/ 5.50"
       }
+    };
 
-      async function init() {
-        const recognizer = await createModel();
-        const classLabels = recognizer.wordLabels();
-        const labelContainer = document.getElementById("label-container");
+    let recognizer;
 
-        labelContainer.innerHTML = "";
-        for (let i = 0; i < classLabels.length; i++) {
-          labelContainer.appendChild(document.createElement("div"));
+    async function init() {
+      const checkpointURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+
+      recognizer = await tmSound.create(checkpointURL, metadataURL);
+      await recognizer.ensureModelLoaded();
+
+      recognizer.listen(result => {
+        const label = result.label;
+        document.getElementById("label").innerText = `Detectado: ${label}`;
+        const img = document.getElementById("product-img");
+        const priceTag = document.getElementById("price");
+
+        if (productImages[label]) {
+          img.src = productImages[label].img;
+          img.style.display = "block";
+          priceTag.innerText = `Precio: ${productImages[label].price}`;
+        } else {
+          img.style.display = "none";
+          priceTag.innerText = "";
         }
+      }, {
+        includeSpectrogram: false,
+        probabilityThreshold: 0.65
+      });
+    }
 
-        recognizer.listen(result => {
-          const scores = result.scores;
-          for (let i = 0; i < classLabels.length; i++) {
-            labelContainer.childNodes[i].innerHTML =
-              classLabels[i] + ": " + scores[i].toFixed(2);
-          }
-        }, {
-          includeSpectrogram: false,
-          probabilityThreshold: 0.75,
-          overlapFactor: 0.5
-        });
-      }
-    </script>
-  </body>
+    init(); // se inicia automáticamente
+  </script>
+</body>
 </html>
