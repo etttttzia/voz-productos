@@ -1,36 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Reconocimiento de Voz - Productos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✨ Reconocimiento de Productos por Voz ✨</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #fbd3e9, #bb377d);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+      color: #4a004a;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #ff80ab;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1em;
+      color: white;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    button:hover {
+      background-color: #f06292;
+    }
+    #label {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+    #product-img {
+      width: 200px;
+      display: none;
+      margin-top: 20px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    #price {
+      font-size: 1.3em;
+      margin-top: 10px;
+      color: #880e4f;
+    }
+  </style>
 </head>
-<body style="text-align:center; font-family: sans-serif">
+<body>
   <h1>🎤 Di el nombre del producto</h1>
-  <p id="label" style="font-size: 20px;"></p>
-  <img id="product-img" src="" style="width:200px; display:none; margin-top:20px;" />
-  <p id="price" style="font-size: 18px; font-weight: bold;"></p>
+  <button onclick="init()">Iniciar reconocimiento</button>
+  <p id="label"></p>
+  <img id="product-img" src="" />
+  <p id="price"></p>
 
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/sound@0.8/dist/teachablemachine-sound.min.js"></script>
   <script>
-    const URL = "./";
+    const URL = "files/";
 
     const productImages = {
-      "CASINO FRESA PACK X 6 UNIDADES": {
-        img: "CASINO FRESA PACK X 6 UNIDADES.webp",
-        price: "S/ 4.50"
-      },
-      "GLOBO POP FRESA BOLSA X 24 UNIDADES": {
-        img: "GLOBO POP FRESA BOLSA X 24 UNIDADES.jpg",
-        price: "S/ 8.90"
-      },
-      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": {
-        img: "INCA KOLA 600ML PAQUETE X 12 UNIDADES.webp",
-        price: "S/ 22.00"
-      },
-      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": {
-        img: "NIK CHICO CHOCOLATE PACK X 6 UNIDADES.webp",
-        price: "S/ 5.50"
-      }
+      "CASINO FRESA PACK X 6 UNIDADES": "CASINO FRESA PACK X 6 UNIDADES.webp",
+      "GLOBO POP FRESA BOLSA X 24 UNIDADES": "GLOBO POP FRESA BOLSA X 24 UNIDADES.jpg",
+      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": "INCA KOLA 600ML PAQUETE X 12 UNIDADES.webp",
+      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": "NIK CHICO CHOCOLATE PACK X 6 UNIDADES.webp"
+    };
+
+    const productPrices = {
+      "CASINO FRESA PACK X 6 UNIDADES": "S/ 3.50",
+      "GLOBO POP FRESA BOLSA X 24 UNIDADES": "S/ 5.20",
+      "INCA KOLA 600ML PAQUETE X 12 UNIDADES": "S/ 18.00",
+      "NIK CHICO CHOCOLATE PACK X 6 UNIDADES": "S/ 2.80"
     };
 
     let recognizer;
@@ -46,23 +86,21 @@
         const label = result.label;
         document.getElementById("label").innerText = `Detectado: ${label}`;
         const img = document.getElementById("product-img");
-        const priceTag = document.getElementById("price");
+        const price = document.getElementById("price");
 
         if (productImages[label]) {
-          img.src = productImages[label].img;
+          img.src = "files/" + productImages[label];
           img.style.display = "block";
-          priceTag.innerText = `Precio: ${productImages[label].price}`;
+          price.innerText = `Precio: ${productPrices[label]}`;
         } else {
           img.style.display = "none";
-          priceTag.innerText = "";
+          price.innerText = "";
         }
       }, {
         includeSpectrogram: false,
         probabilityThreshold: 0.65
       });
     }
-
-    init(); // se inicia automáticamente
   </script>
 </body>
 </html>
