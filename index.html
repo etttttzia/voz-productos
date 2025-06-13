@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reconocimiento de Productos</title>
-  <script src="https://unpkg.com/@teachablemachine/sound@0.8.4/dist/teachablemachine-sound.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/sound@0.8/dist/teachablemachine-sound.min.js"></script>
   <style>
     body {
       background-color: #ffe6f0;
@@ -55,9 +55,7 @@
   <img id="product-img" src="" />
 
   <script>
-    // ✅ Como todo está en la raíz, quitamos /model/
-    const checkpointURL = "model.json";
-    const metadataURL = "metadata.json";
+    const URL = "https://teachablemachine.withgoogle.com/models/if07E20Wq/";
 
     const productImages = {
       "CASINO FRESA PACK X 6 UNIDADES": "CASINO FRESA PACK X 6 UNIDADES.webp",
@@ -76,6 +74,9 @@
     let recognizer;
 
     async function init() {
+      const checkpointURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+
       recognizer = await tmSound.create(checkpointURL, metadataURL);
       await recognizer.ensureModelLoaded();
 
