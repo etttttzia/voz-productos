@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reconocimiento de Productos</title>
+  <!-- ✅ CDN CORRECTO Y ACTUALIZADO -->
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/sound@0.8.4/dist/teachablemachine-sound.min.js"></script>
   <style>
     body {
@@ -55,7 +56,8 @@
   <img id="product-img" src="" />
 
   <script>
-    const URL = "./";
+    // ✅ LA RUTA AL MODELO .json desde la RAÍZ
+    const URL = "./model/";
 
     const productImages = {
       "CASINO FRESA PACK X 6 UNIDADES": "CASINO FRESA PACK X 6 UNIDADES.webp",
@@ -87,7 +89,7 @@
         const price = document.getElementById("price");
 
         if (productImages[label]) {
-          img.src = "./" + productImages[label];
+          img.src = productImages[label];
           img.style.display = "block";
           price.innerText = `💰 Precio: ${productPrices[label]}`;
         } else {
